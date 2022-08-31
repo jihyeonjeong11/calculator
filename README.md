@@ -1,3 +1,12 @@
+ReactJS + Typescript + Redux로 작업하는 계산기 웹 앱입니다.
+
+2022.08.31 - 기본 view 및 redux 로직 추가
+
+
+todo:
+eval 함수 vanilla로 구현
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
