@@ -2,55 +2,60 @@ import React, { SyntheticEvent } from "react";
 import "./App.css";
 import type { RootState } from "./store/index";
 import { useSelector, useDispatch } from "react-redux";
-import { decrement, add } from "./features/counterSlice";
+import {
+  operate,
+  add,
+  reset,
+  evaluate,
+  del,
+  decimal,
+} from "./features/counterSlice";
 
 import Grid from "./components/Grid";
+import { calKeys } from "./data/symbols";
+import ResultDisplay from "./components/ResultDisplay";
 
-interface KeyProps {
-  val: string;
-  big?: boolean;
-  color?:string;
-}
-
-const keys: KeyProps[][] = [
-  [{ val: "ac", big: true }, { val: "del" }, { val: "+", color: 'rgb(243,174,61)' }],
-  [{ val: "1" }, { val: "2" }, { val: "3" }, { val: "*", color: 'rgb(243,174,61)' }],
-  [{ val: "4" }, { val: "5" }, { val: "6" }, { val: "÷", color: 'rgb(243,174,61)' }],
-  [{ val: "7" }, { val: "8" }, { val: "9" }, { val: "-", color: 'rgb(243,174,61)' }],
-  [{ val: "." }, { val: "0" }, { val: "=", color: 'rgb(243,174,61)', big: true }],
-];
-
-const SayHelloRedux = () => {
-  const calculation = useSelector((state: RootState) => state.counter.value);
-  
-
-  return (
-    <div className="result-layout">
-      <h1 className="result-text">{calculation}</h1>
-    </div>
-  );
-};
+// type InputChangeEventHandler = React.ChangeEventHandler<HTMLInputElement>
+// type TextAreaChangeEventHandler = React.ChangeEventHandler<HTMLTextAreaElement>
+// type SelectChangeEventHandler = React.ChangeEventHandler<HTMLSelectElement>
 
 
 
+const data: KeyProps[][] = calKeys;
 
-
-const App = () => {
+const App: React.FC =() : React.ReactElement => {
   const dispatch = useDispatch();
-  const click = (target: HTMLButtonElement) => dispatch(add(target.value));
-  const onClickCal = (event: SyntheticEvent<HTMLDivElement, MouseEvent>) => {
-    let target = (event.target as HTMLButtonElement)
-    click(target)
-  }; 
-   return (
+  const addDispatch = (val: string) => dispatch(add(val));
+  const operateDispatch = (val: string) => dispatch(operate(val));
+  const resetDispatch = () => dispatch(reset());
+  const evalDispatch = () => dispatch(evaluate());
+  const delDispatch = () => dispatch(del());
+  const decimalDispatch = () => dispatch(decimal());
+  const onClickCal = (
+    event: SyntheticEvent<HTMLDivElement, MouseEvent>
+  ): void => {
+    let target = event.target as HTMLButtonElement;
+    clickHandler(target);
+  };
+
+  const clickHandler = (target: HTMLButtonElement): void => {
+    switch (target.id) {
+      default:
+        break;
+      case "num":
+        addDispatch(target.value);
+        break;
+    }
+  };
+  return (
     <main>
       <div className="cal-wrapper">
-      <div className="cal-layout" onClick={onClickCal}>
-        <SayHelloRedux />
-        {keys.map((item, index) => (
-          <Grid key={index + 'grid'} child={item}/>            
-        ))}
-      </div>
+        <div className="cal-layout" onClick={onClickCal}>
+          <ResultDisplay />
+          {data.map((item, index) => (
+            <Grid key={index + "grid"} child={item} />
+          ))}
+        </div>
       </div>
     </main>
   );

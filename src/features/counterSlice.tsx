@@ -1,58 +1,53 @@
-import {createSlice} from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, current } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import {
+  add_action,
+  eval_action,
+  operate_action,
+  operate_eval_action,
+  del_action,
+  decimal_action,
+} from "../action/calActions";
 
 // reduxjs toolkit으로 구현한 계산기 redux
 
-export interface CounterState {
-  value: string
-  isCalculated : boolean
-}
-
 const initialState: CounterState = {
-  value: '0',
-  isCalculated: false
-}
-
-
+  value: "",
+  isCalculated: false,
+  prevOperand: "",
+  prevCalculation: "",
+};
 
 export const counterSlice = createSlice({
-  name: 'counter',
+  name: "counter",
   initialState,
   reducers: {
-    add: (state, action:PayloadAction<string>) => {
-
+    add: (state: CounterState, action: PayloadAction<string>) => {
       // 맨 처음 스트링이 '0' 일때는 0을 뺴고 넣어줘야 한다.
-
-      
-        switch(action.payload){
-          default:  
-            (state.value || state.isCalculated) === initialState.value ? state.value = action.payload : state.value+= action.payload
-            state.isCalculated = false
-            break
-          case 'ac':
-            state.value = "0"
-            break
-          case 'del':
-            state.value = state.value.slice(0,-1)
-            break
-          case '=':
-            state.value = eval(state.value)
-            state.isCalculated = true
-            break
-
-        
-
-      }
+      //state = computeString(state, action)
+      return add_action(current(state), action);
     },
-    decrement: (state) => {
-      return
+    operate: (state: CounterState, action: PayloadAction<string>) => {
+      return state.prevOperand && state.value
+        ? operate_eval_action(current(state), action)
+        : operate_action(current(state), action);
     },
-    incrementByAmount: (state, action: PayloadAction<number>) =>  {
-      state.value += action.payload
-    }
-  }
-})
+    reset: () => {
+      return initialState;
+    },
+    evaluate: (state: CounterState) => {
+      return eval_action(current(state));
+    },
+    del: (state: CounterState) => {
+      return del_action(current(state));
+    },
+    decimal: (state: CounterState) => {
+      return decimal_action(current(state));
+    },
+  },
+});
 
-export const { add, decrement, incrementByAmount } = counterSlice.actions
+export const { add, operate, evaluate, reset, del, decimal } =
+  counterSlice.actions;
 
-export default counterSlice.reducer
+export default counterSlice.reducer;
