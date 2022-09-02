@@ -3,7 +3,7 @@ import * as helpers from "../helpers/helperfuncs";
 import Keys from "./Keys";
 
 interface GridProps {
-  child: any[];
+  child: KeyProps[];
 }
 
 const Grid: React.FC<GridProps> = ({ child }: GridProps): ReactElement => {
@@ -15,7 +15,7 @@ const Grid: React.FC<GridProps> = ({ child }: GridProps): ReactElement => {
 
   return (
     <div className="grid-layout" style={{ gridTemplateColumns: gridTemplate }}>
-      {child.map((c: ChildProps, index: number) => {
+      {child.map((c: KeyProps, index: number) => {
         return (
           <Keys val={c.val} color={c.color} type={c.type} key={index + "key"} />
         );

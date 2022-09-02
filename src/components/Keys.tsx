@@ -15,7 +15,6 @@ const KeyRedux: React.FC<KeyProps> = ({
     <React.Fragment key={val + "button"}>
       <button
         id={type}
-        className="span-two"
         value={val}
         style={{ backgroundColor: color ? color : "rgb(235,235,235)" }}
       >
