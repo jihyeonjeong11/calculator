@@ -43,8 +43,6 @@ import { operandSymbols } from "../data/symbols"
 const calculate = (prevCal: string, prevOp: string, currVal: string,) => {
 
   // const result = eval(str1 +prevOperand+ str2)
-  
-  
   return   JSON.stringify(eval(prevCal + prevOp + currVal))
   
 }
